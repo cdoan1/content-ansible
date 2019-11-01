@@ -6,8 +6,9 @@ Use this project to setup a OCP based MCM cluster with content.
 * runs tasks against the localhost
 * expects you to setup before hand
   * `oc login` to the target cluster
+  * `cloudctl login` to the target cluster
   * `kubectl` cli
-  * `helm` cli (we only use helm cli to covert helm package to k8s manifests
+  * `helm` cli
 
 ## Content Catalog
 
