@@ -1,4 +1,3 @@
 *.log
-./inventory
 inventory
 .secret*
