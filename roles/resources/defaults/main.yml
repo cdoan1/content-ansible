@@ -1,0 +1,2 @@
+kubernetes_base_path: "{{ local_base_config_path|default('/tmp') }}/{{ kubernetes_deployment_name }}-config"
+kubernetes_deployment_name: content
