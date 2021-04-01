@@ -20,3 +20,15 @@ Use this project to setup a OCP based MCM cluster with content.
 - [ ] managed cluster 1
 - [ ] managed cluster 2
 
+
+# DSAL playbook
+
+## Galaxy
+
+```
+ansible-galaxy collection install community.general
+```
+
+```bash
+ansible-playbook -i inventory-dsal dsal.yml
+```
