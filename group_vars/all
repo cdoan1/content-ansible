@@ -1,1 +1,6 @@
 ---
+
+# SUBSCRIPTION
+
+RH_SUBSCRIPTION_USER: "{{ lookup('env', 'RH_SUBSCRIPTION_USER') | default('nobody', True) }}"
+RH_SUBSCRIPTION_PASSWORD: "{{ lookup('env', 'RH_SUBSCRIPTION_PASSWORD') | default('nobody', True) }}"

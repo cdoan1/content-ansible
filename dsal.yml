@@ -1,0 +1,8 @@
+---
+
+- name: Configure DSAL nodes
+  hosts: dsal
+  gather_facts: false
+  roles:
+    - dsal-common
+

@@ -1,0 +1,12 @@
+- name: Verify remote connection
+  command: 'ls -al'
+  register: output
+  
+- name: "Register as user ({{ RH_SUBSCRIPTION_USER }}) with password (somepass) and auto-subscribe to available content."
+  community.general.redhat_subscription:
+    state: present
+    username: "{{ RH_SUBSCRIPTION_USER }}"
+    password: "{{ RH_SUBSCRIPTION_PASSWORD }}"
+    auto_attach: true
+
+- include: packages.yml
