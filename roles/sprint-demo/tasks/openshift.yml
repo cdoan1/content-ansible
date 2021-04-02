@@ -26,3 +26,18 @@
 
 - name: Query managed clusters
   command: 'oc get managedclusters -A'
+
+- name: Get an existing Service object
+  community.kubernetes.k8s_info:
+    api_version: v1
+    kind: Service
+    name: acm-custom-registry
+    namespace: open-cluster-management
+  register: acr
+
+- name: "k8s info kind:MultiClusterObservability name:observability"
+  community.kubernetes.k8s_info:
+    api_version: v1beta2
+    kind: MultiClusterObservability
+    name: observability
+  register: mco
