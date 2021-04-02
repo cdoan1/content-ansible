@@ -1,0 +1,28 @@
+# plugin: community.kubernetes.openshift
+# connections:
+#   - host: "{{ SPRINT_DEMO_HUB_CLUSTER_API }}"
+#     api_key: "{{ SPRINT_DEMO_HUB_CLUSTER_TOKEN }}"
+#     verify_ssl: false
+
+
+- name: Verify OpenShift connection
+  command: 'hostname'
+  register: output
+
+- name: Verify oc connection
+  command: 'oc cluster-info'
+  register: output
+
+- name: Query all pods in all RHACM namespaces
+  command: 'oc get pods -n {{ item }}'
+  with_items:
+    - open-cluster-management
+    - open-cluster-management-hub
+    - open-cluster-management-issuer
+    - open-cluster-management-agent
+    - open-cluster-management-agent-addon
+    - open-cluster-management-observability
+    - open-cluster-management-addon-observability
+
+- name: Query managed clusters
+  command: 'oc get managedclusters -A'

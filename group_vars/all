@@ -4,3 +4,8 @@
 
 RH_SUBSCRIPTION_USER: "{{ lookup('env', 'RH_SUBSCRIPTION_USER') | default('nobody', True) }}"
 RH_SUBSCRIPTION_PASSWORD: "{{ lookup('env', 'RH_SUBSCRIPTION_PASSWORD') | default('nobody', True) }}"
+
+SPRINT_DEMO_CLUSTER_USER: "{{ lookup('env', 'SPRINT_DEMO_CLUSTER_USER') | default('', True) }}"
+SPRINT_DEMO_CLUSTER_PASSWORD: "{{ lookup('env', 'SPRINT_DEMO_CLUSTER_PASSWORD') | default('', True) }}"
+SPRINT_DEMO_CLUSTER_API: "{{ lookup('env', 'SPRINT_DEMO_CLUSTER_API') | default('', True) }}"
+SPRINT_DEMO_CLUSTER_TOKEN: "{{ lookup('env', 'SPRINT_DEMO_CLUSTER_TOKEN') | default('', True) }}"
