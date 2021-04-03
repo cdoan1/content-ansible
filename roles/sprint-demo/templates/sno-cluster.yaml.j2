@@ -1,0 +1,125 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: sresnotest0
+  namespace: sresnotest0
+  annotations:
+    hive.openshift.io/disable-install-log-password-redaction: "true"
+  labels:
+    cloud: AWS
+    region: us-east-2
+    vendor: OpenShift
+spec:
+  baseDomain: {{ HIVE_BASE_DOMAIN }}
+  clusterName: sresnotest0
+  controlPlaneConfig:
+    servingCertificates: {}
+  installAttemptsLimit: 2
+  installed: false
+  platform:
+    aws:
+      credentialsSecretRef:
+        name: sresnotest0-aws-creds
+      region: us-east-2
+  provisioning:
+    imageSetRef:
+      name: sno-4.6.6
+    installConfigSecretRef:
+      name: sresnotest0-install-config
+    sshPrivateKeySecretRef:
+      name: sresnotest0-ssh-private-key
+  pullSecretRef:
+    name: sresnotest0-pull-secret
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: sresnotest0
+  labels:
+    name: sresnotest0
+    cloud: Amazon
+    region: us-east-2
+    vendor: OpenShift
+spec:
+  hubAcceptsClient: true
+---
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  name: sresnotest0-worker
+  namespace: sresnotest0
+spec:
+  name: worker
+  clusterDeploymentRef:
+    name: sresnotest0
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 100
+        type: io1
+      type: m5.xlarge
+  replicas: 0
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sresnotest0-pull-secret
+  namespace: sresnotest0
+stringData:
+  .dockerconfigjson: >-
+    {{ HIVE_PULL_SECRET | replace(" ", "") }}
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+data:
+  install-config.yaml: >-
+    {{ HIVE_INSTALL_CONFIG | trim }}
+kind: Secret
+metadata:
+  name: sresnotest0-install-config
+  namespace: sresnotest0
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sresnotest0-ssh-private-key
+  namespace: sresnotest0
+stringData:
+  ssh-privatekey: |-
+    {{ HIVE_SSH_PRIVATEKEY | indent(4, False) }}
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sresnotest0-aws-creds
+  namespace: sresnotest0
+stringData:
+  aws_access_key_id: {{ AWS_SECRET_ACCESS_KEY_ID }}
+  aws_secret_access_key: {{ AWS_SECRET_ACCESS_KEY }}
+type: Opaque
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: sresnotest0
+  namespace: sresnotest0
+spec:
+  applicationManager:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  clusterLabels:
+    cloud: Amazon
+    vendor: OpenShift
+  clusterName: sresnotest0
+  clusterNamespace: sresnotest0
+  iamPolicyController:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  version: 2.2.0
