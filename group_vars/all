@@ -13,7 +13,9 @@ SPRINT_DEMO_CLUSTER_TOKEN: "{{ lookup('env', 'SPRINT_DEMO_CLUSTER_TOKEN') | defa
 AWS_SECRET_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY_ID') | default('', True) }}"
 AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('', True) }}"
 
-# HIVE | CLUSTER
+# HIVE
+
+HIVE_CLUSTER_NAME: "{{ lookup('env', 'HIVE_CLUSTER_NAME') | default('snotest', True) }}"
 
 HIVE_PULL_SECRET: |-
   {{ lookup('env', 'HIVE_PULL_SECRET') | b64decode | trim }}
