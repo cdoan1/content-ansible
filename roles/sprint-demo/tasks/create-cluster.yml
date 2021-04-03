@@ -1,5 +1,11 @@
 ---
 
+# - name: "Delete {{ SNO_CLUSTERIMAGESET_NAME }} clusterimageset"
+#   community.kubernetes.k8s:
+#     state: absent
+#     definition: "{{ lookup('template', 'clusterimageset.yaml.j2') | from_yaml }}"
+#   ignore_errors: yes
+
 - name: "Create {{ SNO_CLUSTERIMAGESET_NAME }} clusterimageset"
   community.kubernetes.k8s:
     state: present
@@ -16,6 +22,7 @@
 - name: installconfigyaml
   debug:
     msg: "{{ installconfigyaml }}"
+  when: debug is defined
 
 - name: installconfig
   debug:
@@ -41,3 +48,8 @@
     dest: /tmp/sno-cluster.yaml
     mode: '0755'
   
+- name: "Manual trigger cluster provision ..."
+  debug:
+    msg:
+    - "oc new-project {{ HIVE_CLUSTER_NAME }}"
+    - "oc apply -f /tmp/sno-cluster.yaml"

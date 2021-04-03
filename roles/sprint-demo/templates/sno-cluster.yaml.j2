@@ -69,7 +69,7 @@ metadata:
   namespace: {{ HIVE_CLUSTER_NAME }}
 stringData:
   .dockerconfigjson: >-
-    {{ HIVE_PULL_SECRET | replace(" ", "") }}
+    {{ HIVE_PULL_SECRET | regex_replace("\'", "\"") }}
 type: kubernetes.io/dockerconfigjson
 ---
 apiVersion: v1

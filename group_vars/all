@@ -17,17 +17,19 @@ AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('', 
 #
 # for guidance on how YAML multiline works see: https://yaml-multiline.info/
 #
-
-HIVE_AWS_REGION: "{{ lookup('env', 'HIVE_AWS_REGION') | default('snotest', True) }}"
-
+HIVE_AWS_REGION: "{{ lookup('env', 'HIVE_AWS_REGION') | default('us-east-2', True) }}"
 HIVE_CLUSTER_NAME: "{{ lookup('env', 'HIVE_CLUSTER_NAME') | default('snotest', True) }}"
+
+# 1. get base pull secret from try.openshift
+# 2. layer in registry.ci token, not so easy to mirror the images!
+# 3. layer in acm-d secret
 
 HIVE_PULL_SECRET: |-
   {{ lookup('env', 'HIVE_PULL_SECRET') | b64decode | trim }}
 
 # TODO: test out b64decoded of install config
-HIVE_INSTALL_CONFIG: |-
-  {{ lookup('env', 'HIVE_INSTALL_CONFIG') | trim }}
+# HIVE_INSTALL_CONFIG: |-
+#   {{ lookup('env', 'HIVE_INSTALL_CONFIG') | trim }}
 
 HIVE_SSH_PUBLICKEY: |-
   {{ lookup('env', 'HIVE_SSH_PUBLICKEY') | b64decode | trim }}
@@ -44,6 +46,5 @@ HIVE_AWS_MASTER_SIZE: "{{ lookup('env', 'HIVE_AWS_MASTER_SIZE') | default('m5.2x
 # Official OpenShift Nightly
 # https://openshift-release.apps.ci.l2s4.p1.openshiftapps.com/
 #
-
 SNO_CLUSTERIMAGESET_NAME: 4.8.0-0.ci-2021-04-03-004317
 SNO_CLUSTERIMAGESET_URL: registry.ci.openshift.org/ocp/release:4.8.0-0.ci-2021-04-03-004317
