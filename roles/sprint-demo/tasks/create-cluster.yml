@@ -18,6 +18,7 @@
 
 - set_fact:
     clusteryaml: "{{ lookup('template', 'sno-cluster.yaml.j2') }}"
+    manifestpath: ./clusterdeployment/config/{{ HIVE_CLUSTER_NAME }}
 
 - name: installconfigyaml
   debug:
@@ -36,20 +37,26 @@
   debug:
     msg: "{{ clusteryaml.split('\n') }}"
 
+- name: Create {{ manifestpath }} folder
+  ansible.builtin.file:
+    path: "{{ manifestpath }}"
+    state: directory
+    mode: '0755'
+
 - name: Create install-config.yaml
   ansible.builtin.template:
     src: install-config.yaml.j2
-    dest: /tmp/install-config.yaml
+    dest: "{{ manifestpath }}/install-config.yaml"
     mode: '0755'
 
 - name: Create cluster.yaml
   ansible.builtin.template:
     src: sno-cluster.yaml.j2
-    dest: /tmp/sno-cluster.yaml
+    dest: "{{ manifestpath }}/cluster.yaml"
     mode: '0755'
   
 - name: "Manual trigger cluster provision ..."
   debug:
     msg:
     - "oc new-project {{ HIVE_CLUSTER_NAME }}"
-    - "oc apply -f /tmp/sno-cluster.yaml"
+    - "oc apply -f {{ manifestpath }}/cluster.yaml"

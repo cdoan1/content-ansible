@@ -18,11 +18,11 @@
     - open-cluster-management-agent-addon
     - open-cluster-management-observability
     - open-cluster-management-addon-observability
-  when: False
+  # when: False
 
 - name: Query managed clusters
   command: 'oc get managedclusters -A'
-  when: False
+  # when: False
 
 # - name: Get an existing Service object
 #   community.kubernetes.k8s_info:
