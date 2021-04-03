@@ -32,15 +32,15 @@
 #     namespace: open-cluster-management
 #   register: acr
 
+# - name: "Delete {{ SNO_CLUSTERIMAGESET_NAME }} clusterimageset"
+#   community.kubernetes.k8s:
+#     state: absent
+#     definition: "{{ lookup('template', 'clusterimageset.yaml.j2') | from_yaml }}"
+
 - name: "k8s info kind:MultiClusterObservability name:observability"
   community.kubernetes.k8s_info:
     api_version: v1beta2
     kind: MultiClusterObservability
     name: observability
   register: mco
-
-- name: POC sno cluster template
-  ansible.builtin.template:
-    src: sno-cluster.yaml.j2
-    dest: /tmp/sno-cluster.yaml
-    mode: '0755'
+  # when: False

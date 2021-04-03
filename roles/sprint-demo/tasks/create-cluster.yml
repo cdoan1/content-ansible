@@ -1,0 +1,43 @@
+---
+
+- name: "Create {{ SNO_CLUSTERIMAGESET_NAME }} clusterimageset"
+  community.kubernetes.k8s:
+    state: present
+    definition: "{{ lookup('template', 'clusterimageset.yaml.j2') | from_yaml }}"
+
+- set_fact:
+    installconfigyaml: "{{ lookup('template', 'install-config.yaml.j2') | from_yaml }}"
+    HIVE_INSTALL_CONFIG: "{{ lookup('template', 'install-config.yaml.j2') | from_yaml | b64encode }}"
+    installconfigraw: "{{ lookup('template', 'install-config.yaml.j2') }}"
+
+- set_fact:
+    clusteryaml: "{{ lookup('template', 'sno-cluster.yaml.j2') }}"
+
+- name: installconfigyaml
+  debug:
+    msg: "{{ installconfigyaml }}"
+
+- name: installconfig
+  debug:
+    msg: "{{ installconfigraw.split('\n') }}"
+
+- name: HIVE_INSTALL_CONFIG
+  debug:
+    msg: "{{ HIVE_INSTALL_CONFIG }}"
+
+- name: Debug dry run cluster.yaml
+  debug:
+    msg: "{{ clusteryaml.split('\n') }}"
+
+- name: Create install-config.yaml
+  ansible.builtin.template:
+    src: install-config.yaml.j2
+    dest: /tmp/install-config.yaml
+    mode: '0755'
+
+- name: Create cluster.yaml
+  ansible.builtin.template:
+    src: sno-cluster.yaml.j2
+    dest: /tmp/sno-cluster.yaml
+    mode: '0755'
+  

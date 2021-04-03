@@ -1,0 +1,6 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterImageSet
+metadata:
+  name: {{ SNO_CLUSTERIMAGESET_NAME }}
+spec:
+  releaseImage: {{ SNO_CLUSTERIMAGESET_URL }}

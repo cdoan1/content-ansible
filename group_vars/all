@@ -14,6 +14,11 @@ AWS_SECRET_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY_ID') | defaul
 AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('', True) }}"
 
 # HIVE
+#
+# for guidance on how YAML multiline works see: https://yaml-multiline.info/
+#
+
+HIVE_AWS_REGION: "{{ lookup('env', 'HIVE_AWS_REGION') | default('snotest', True) }}"
 
 HIVE_CLUSTER_NAME: "{{ lookup('env', 'HIVE_CLUSTER_NAME') | default('snotest', True) }}"
 
@@ -24,7 +29,21 @@ HIVE_PULL_SECRET: |-
 HIVE_INSTALL_CONFIG: |-
   {{ lookup('env', 'HIVE_INSTALL_CONFIG') | trim }}
 
+HIVE_SSH_PUBLICKEY: |-
+  {{ lookup('env', 'HIVE_SSH_PUBLICKEY') | b64decode | trim }}
+
 HIVE_SSH_PRIVATEKEY: |-
   {{ lookup('env', 'HIVE_SSH_PRIVATEKEY') | b64decode | trim }}
 
 HIVE_BASE_DOMAIN: "{{ lookup('env', 'HIVE_BASE_DOMAIN') | default('', True) }}"
+HIVE_KLUSTERLETADDONCONFIG_VERSION: "{{ lookup('env', 'HIVE_KLUSTERLETADDONCONFIG_VERSION') | default('2.3.0', True) }}"
+HIVE_AWS_MASTER_SIZE: "{{ lookup('env', 'HIVE_AWS_MASTER_SIZE') | default('m5.2xlarge', True) }}"
+
+# CLUSTERIMAGESET
+#
+# Official OpenShift Nightly
+# https://openshift-release.apps.ci.l2s4.p1.openshiftapps.com/
+#
+
+SNO_CLUSTERIMAGESET_NAME: 4.8.0-0.ci-2021-04-03-004317
+SNO_CLUSTERIMAGESET_URL: registry.ci.openshift.org/ocp/release:4.8.0-0.ci-2021-04-03-004317

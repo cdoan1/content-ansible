@@ -8,7 +8,7 @@ metadata:
     hive.openshift.io/disable-install-log-password-redaction: "true"
   labels:
     cloud: AWS
-    region: us-east-2
+    region: {{ HIVE_AWS_REGION }}
     vendor: OpenShift
 spec:
   baseDomain: {{ HIVE_BASE_DOMAIN }}
@@ -21,10 +21,10 @@ spec:
     aws:
       credentialsSecretRef:
         name: {{ HIVE_CLUSTER_NAME }}-aws-creds
-      region: us-east-2
+      region: {{ HIVE_AWS_REGION }}
   provisioning:
     imageSetRef:
-      name: sno-4.6.6
+      name: {{ SNO_CLUSTERIMAGESET_NAME }}
     installConfigSecretRef:
       name: {{ HIVE_CLUSTER_NAME }}-install-config
     sshPrivateKeySecretRef:
@@ -39,7 +39,7 @@ metadata:
   labels:
     name: {{ HIVE_CLUSTER_NAME }}
     cloud: Amazon
-    region: us-east-2
+    region: {{ HIVE_AWS_REGION }}
     vendor: OpenShift
 spec:
   hubAcceptsClient: true
@@ -123,4 +123,4 @@ spec:
     enabled: true
   searchCollector:
     enabled: true
-  version: 2.2.0
+  version: {{ HIVE_KLUSTERLETADDONCONFIG_VERSION }}
