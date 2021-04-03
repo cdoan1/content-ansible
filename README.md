@@ -10,25 +10,25 @@ Use this project to setup a OCP based MCM cluster with content.
   * `kubectl` cli
   * `helm` cli
 
-## Content Catalog
+# Galaxy
 
-- [ ] clusterimagepolicy - whitelists allowed docker repositories
-- [ ] GRC policies - see design (here)
-- [ ] inventory application
-- [ ] ticketing application
-- [ ] GRC policy controllers
-- [ ] managed cluster 1
-- [ ] managed cluster 2
-
-
-# DSAL playbook
-
-## Galaxy
-
-```
+```bash
 ansible-galaxy collection install community.general
+ansible-galaxy collection install community.kubernetes
 ```
 
 ```bash
+pip install kubernetes openshift
+```
+
+# DSAL playbook
+
+```bash
 ansible-playbook -i inventory-dsal dsal.yml
+```
+
+# SPRINT playbook
+
+```bash
+ansible-playbook -i inventory-sprint sprint-demo.yml
 ```

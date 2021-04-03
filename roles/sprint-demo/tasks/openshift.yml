@@ -1,0 +1,41 @@
+---
+
+- name: Verify OpenShift connection
+  command: 'hostname'
+  register: output
+
+- name: Verify oc connection
+  command: 'oc cluster-info'
+  register: output
+
+- name: Query all pods in all RHACM namespaces
+  command: 'oc get pods -n {{ item }}'
+  with_items:
+    - open-cluster-management
+    - open-cluster-management-hub
+    - open-cluster-management-issuer
+    - open-cluster-management-agent
+    - open-cluster-management-agent-addon
+    - open-cluster-management-observability
+    - open-cluster-management-addon-observability
+  when: False
+
+- name: Query managed clusters
+  command: 'oc get managedclusters -A'
+  when: False
+
+# - name: Get an existing Service object
+#   community.kubernetes.k8s_info:
+#     api_version: v1
+#     kind: Service
+#     name: acm-custom-registry
+#     namespace: open-cluster-management
+#   register: acr
+
+- name: "k8s info kind:MultiClusterObservability name:observability"
+  community.kubernetes.k8s_info:
+    api_version: v1beta2
+    kind: MultiClusterObservability
+    name: observability
+  register: mco
+  when: False

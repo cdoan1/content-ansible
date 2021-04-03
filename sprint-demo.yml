@@ -1,0 +1,8 @@
+---
+
+- name: Configure sprint.demo RHACM cluster
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  roles:
+    - sprint-demo
