@@ -20,8 +20,9 @@ HIVE_CLUSTER_NAME: "{{ lookup('env', 'HIVE_CLUSTER_NAME') | default('snotest', T
 HIVE_PULL_SECRET: |-
   {{ lookup('env', 'HIVE_PULL_SECRET') | b64decode | trim }}
 
+# TODO: test out b64decoded of install config
 HIVE_INSTALL_CONFIG: |-
-  {{ lookup('env', 'HIVE_INSTALL_CONFIG') | b64decode | trim }}
+  {{ lookup('env', 'HIVE_INSTALL_CONFIG') | trim }}
 
 HIVE_SSH_PRIVATEKEY: |-
   {{ lookup('env', 'HIVE_SSH_PRIVATEKEY') | b64decode | trim }}
