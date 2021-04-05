@@ -1,0 +1,126 @@
+---
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}
+  namespace: {{ HIVE_CLUSTER_NAME }}
+  annotations:
+    hive.openshift.io/disable-install-log-password-redaction: "true"
+  labels:
+    cloud: AWS
+    region: {{ HIVE_AWS_REGION }}
+    vendor: OpenShift
+spec:
+  baseDomain: {{ HIVE_BASE_DOMAIN }}
+  clusterName: {{ HIVE_CLUSTER_NAME }}
+  controlPlaneConfig:
+    servingCertificates: {}
+  installAttemptsLimit: 2
+  installed: false
+  platform:
+    aws:
+      credentialsSecretRef:
+        name: {{ HIVE_CLUSTER_NAME }}-aws-creds
+      region: {{ HIVE_AWS_REGION }}
+  provisioning:
+    imageSetRef:
+      name: {{ SNO_CLUSTERIMAGESET_NAME2 }}
+    installConfigSecretRef:
+      name: {{ HIVE_CLUSTER_NAME }}-install-config
+    sshPrivateKeySecretRef:
+      name: {{ HIVE_CLUSTER_NAME }}-ssh-private-key
+  pullSecretRef:
+    name: {{ HIVE_CLUSTER_NAME }}-pull-secret
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}
+  labels:
+    name: {{ HIVE_CLUSTER_NAME }}
+    cloud: Amazon
+    region: {{ HIVE_AWS_REGION }}
+    vendor: OpenShift
+spec:
+  hubAcceptsClient: true
+---
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}-worker
+  namespace: {{ HIVE_CLUSTER_NAME }}
+spec:
+  name: worker
+  clusterDeploymentRef:
+    name: {{ HIVE_CLUSTER_NAME }}
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 100
+        type: io1
+      type: m5.xlarge
+  replicas: 0
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}-pull-secret
+  namespace: {{ HIVE_CLUSTER_NAME }}
+stringData:
+  .dockerconfigjson: >-
+    {{ HIVE_PULL_SECRET | regex_replace("\'", "\"") }}
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+data:
+  install-config.yaml: >-
+    {{ HIVE_INSTALL_CONFIG | trim }}
+kind: Secret
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}-install-config
+  namespace: {{ HIVE_CLUSTER_NAME }}
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}-ssh-private-key
+  namespace: {{ HIVE_CLUSTER_NAME }}
+stringData:
+  ssh-privatekey: |-
+    {{ HIVE_SSH_PRIVATEKEY | indent(4, False) }}
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}-aws-creds
+  namespace: {{ HIVE_CLUSTER_NAME }}
+stringData:
+  aws_access_key_id: {{ AWS_SECRET_ACCESS_KEY_ID }}
+  aws_secret_access_key: {{ AWS_SECRET_ACCESS_KEY }}
+type: Opaque
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: {{ HIVE_CLUSTER_NAME }}
+  namespace: {{ HIVE_CLUSTER_NAME }}
+spec:
+  applicationManager:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  clusterLabels:
+    cloud: Amazon
+    vendor: OpenShift
+  clusterName: {{ HIVE_CLUSTER_NAME }}
+  clusterNamespace: {{ HIVE_CLUSTER_NAME }}
+  iamPolicyController:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  version: {{ HIVE_KLUSTERLETADDONCONFIG_VERSION }}

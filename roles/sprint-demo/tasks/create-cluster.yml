@@ -6,10 +6,15 @@
 #     definition: "{{ lookup('template', 'clusterimageset.yaml.j2') | from_yaml }}"
 #   ignore_errors: yes
 
-- name: "Create {{ SNO_CLUSTERIMAGESET_NAME }} clusterimageset"
+- name: "Create 4.8.0 CI clusterimageset"
   community.kubernetes.k8s:
     state: present
     definition: "{{ lookup('template', 'clusterimageset.yaml.j2') | from_yaml }}"
+
+- name: "Create 4.8.0 nightly clusterimageset"
+  community.kubernetes.k8s:
+    state: present
+    definition: "{{ lookup('template', 'clusterimageset-48-nightly.yaml.j2') | from_yaml }}"
 
 - set_fact:
     installconfigyaml: "{{ lookup('template', 'install-config.yaml.j2') | from_yaml }}"
@@ -17,7 +22,7 @@
     installconfigraw: "{{ lookup('template', 'install-config.yaml.j2') }}"
 
 - set_fact:
-    clusteryaml: "{{ lookup('template', 'sno-cluster.yaml.j2') }}"
+    clusteryaml: "{{ lookup('template', 'cluster-48-ci.yaml.j2') }}"
     manifestpath: ./clusterdeployment/config/{{ HIVE_CLUSTER_NAME }}
 
 - name: installconfigyaml
@@ -51,10 +56,16 @@
 
 - name: Create cluster.yaml
   ansible.builtin.template:
-    src: sno-cluster.yaml.j2
+    src: cluster-48-ci.yaml.j2
     dest: "{{ manifestpath }}/cluster.yaml"
     mode: '0755'
-  
+
+- name: Create cluster.yaml
+  ansible.builtin.template:
+    src: cluster-48-nightly.yaml.j2
+    dest: "{{ manifestpath }}/cluster-48-nightly.yaml"
+    mode: '0755'
+
 - name: "Manual trigger cluster provision ..."
   debug:
     msg:

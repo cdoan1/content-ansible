@@ -3,6 +3,7 @@ inventory
 .secret*
 
 collections
+clsuterdeployment
 inventory*
 
 env.rc
