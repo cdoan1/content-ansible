@@ -48,3 +48,16 @@ HIVE_AWS_MASTER_SIZE: "{{ lookup('env', 'HIVE_AWS_MASTER_SIZE') | default('m5.2x
 #
 SNO_CLUSTERIMAGESET_NAME: 4.8.0-0.ci-2021-04-03-004317
 SNO_CLUSTERIMAGESET_URL: registry.ci.openshift.org/ocp/release:4.8.0-0.ci-2021-04-03-004317
+
+# START GITHUB OAUTH APPLICATIONS
+
+GITHUB_ORGANIZATION: "{{ lookup('env', 'GITHUB_ORGANIZATION') | default('', True) }}"
+GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') | default('', True) }}"
+oauth_application:
+- name: playback
+  clientId: ''
+  clientSecret: ''
+organization_groups:
+  - SRE
+
+# END GITHUB OAUTH APPLICATIONS

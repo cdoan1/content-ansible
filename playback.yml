@@ -1,0 +1,8 @@
+---
+
+- name: Configure PLAYBACK cluster
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  roles:
+    - oauth-github
