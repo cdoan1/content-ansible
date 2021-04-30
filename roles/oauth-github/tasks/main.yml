@@ -1,0 +1,8 @@
+---
+
+- set_fact:
+    clientId: "{{ oauth_application|selectattr('name', 'equalto', cluster_name)|map(attribute='clientId')|list|first }}"
+    clientSecret: "{{ oauth_application|selectattr('name', 'equalto', cluster_name)|map(attribute='clientSecret')|list|first }}"
+
+- include: oauth.yml
+  when: clientId is defined and clientId|length > 0
